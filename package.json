@@ -1,7 +1,7 @@
 {
   "name": "cubehash.js",
   "description": "CubeHash is a very simple cryptographic hash function",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Peter Müller <munter@fumle.dk>",
   "keywords": [
     "crypto",
