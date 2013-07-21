@@ -1,0 +1,25 @@
+{
+  "name": "cubehash.js",
+  "description": "CubeHash is a very simple cryptographic hash function",
+  "version": "0.1.0",
+  "author": "Peter Müller <munter@fumle.dk>",
+  "keywords": [
+    "crypto",
+    "hash"
+  ],
+  "license": "BSD",
+  "main": "cubehash.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Munter/cubehash.js.git"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  }
+}
