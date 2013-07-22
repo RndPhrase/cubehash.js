@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Munter/cubehash.js.git"
+    "url": "git@github.com:RndPhrase/cubehash.js.git"
   },
   "devDependencies": {
     "mocha": "*"
