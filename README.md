@@ -16,7 +16,7 @@ Cubehash.js is AMD and CommonJS compatible, and can be used through [npm](https:
 Browser support
 ---------------
 
-[![browser support](https://ci.testling.com/Munter/cubehash.js.png)](https://ci.testling.com/Munter/cubehash.js)
+[![browser support](https://ci.testling.com/RndPhrase/cubehash.js.png)](https://ci.testling.com/RndPhrase/cubehash.js)
 
 
 License
