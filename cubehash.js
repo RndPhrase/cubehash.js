@@ -83,6 +83,10 @@
         // update with data
         data += String.fromCharCode(128);
 
+        while(data.length % 32) {
+            data += String.fromCharCode(0)
+        }
+
         for (i = 0; i < data.length; i += 1) {
             state[0] ^= data.charCodeAt(i);
             transform(state);
