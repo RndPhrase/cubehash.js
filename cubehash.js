@@ -89,8 +89,11 @@
             data += String.fromCharCode(0)
         }
 
-        for (i = 0; i < data.length; i += 1) {
-            state[0] ^= data.charCodeAt(i);
+        for (var i = 0; i < data.length; i += 32) {
+            var block = data.substr(i, 32);
+            for (var j = 0; j < 32; j++) {
+                state[j] ^= block.charCodeAt(j);
+            }
             transform(state);
         }
 
