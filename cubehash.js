@@ -39,6 +39,8 @@
             s += ((v >> 4) & 0xF).toString(16) + (v & 0xF).toString(16);
         }
 
+        while(s.length < 8) s = "0" + s;
+
         return s;
     }
 
