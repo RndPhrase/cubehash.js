@@ -17,7 +17,17 @@
     }
 }(this, function () {
     // Init vector was computed by 10r rounds as described in the specification
-    var init = [
+
+    var Cubehash = function(r, b, f, h) {
+        var self = this;
+        // Currently initialization is hardcoded to 10
+        // if (i == undefined) i = 16;
+        if (r == undefined) r = 1;
+        if (b == undefined) b = 32;
+        if (f == undefined) f = 10;
+        if (h == undefined) h = 8;
+
+        var init = [
             -2096419883, 658334063, -679114902, 1246757400,
             -1523021469, -289996037, 1196718146, 1168084361,
             -2027445816, -1170162360, -822837272, 625197683,
@@ -28,88 +38,94 @@
             19608647852, 9541915967, 5144979599, -4355863926
         ];
 
-    function rotate(a, b) {
-        return (a << b) | (a >>> (32 - b));
-    }
-
-    function intToHex(v) {
-        var s = '';
-
-        for (; v !== 0; v >>>= 8) {
-            s += ((v >> 4) & 0xF).toString(16) + (v & 0xF).toString(16);
+        self.rotate = function(a, b) {
+            return (a << b) | (a >>> (32 - b));
         }
 
-        while(s.length < 8) s = "0" + s;
+        self.intToHex = function(v) {
+            var s = '';
 
-        return s;
-    }
+            for (; v !== 0; v >>>= 8) {
+                s += ((v >> 4) & 0xF).toString(16) + (v & 0xF).toString(16);
+            }
 
-    function swap(arr, i, j) {
-        var tmp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = tmp;
-        return arr;
-    }
+            while(s.length < 8) s = "0" + s;
 
-    function transform(state) {
-        var i, r,
-            y = new Array(16);
+            return s;
+        }
 
-        for (r = 0;r < 8; r += 1) {
-            for (i = 0; i < 16; i += 1) { state[i + 16] += y[i^8] = state[i]; }
-            for (i = 0; i < 16; i += 1) { state[i]       = rotate(y[i],  7)^state[i + 16]; }
-            for (i = 0; i < 16; i += 1) { y[i^2]         = state[i + 16]; }
-            for (i = 0; i < 16; i += 1) { state[i + 16]  = y[i] + state[i]; }
-            for (i = 0; i < 16; i += 1) { y[i^4]         = state[i]; }
-            for (i = 0; i < 16; i += 1) { state[i]       = rotate(y[i], 11)^state[i + 16]; }
-            for (i = 0; i < 16; i += 2) {
-                swap(state, i + 16, i + 17);
+        self.swap = function(arr, i, j) {
+            var tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+            return arr;
+        }
+
+        self.transform = function(state) {
+            var i, r,
+                y = new Array(16);
+
+            for (r = 0;r < 8; r += 1) {
+                for (i = 0; i < 16; i += 1) { state[i + 16] += y[i^8] = state[i]; }
+                for (i = 0; i < 16; i += 1) { state[i]       = self.rotate(y[i],  7)^state[i + 16]; }
+                for (i = 0; i < 16; i += 1) { y[i^2]         = state[i + 16]; }
+                for (i = 0; i < 16; i += 1) { state[i + 16]  = y[i] + state[i]; }
+                for (i = 0; i < 16; i += 1) { y[i^4]         = state[i]; }
+                for (i = 0; i < 16; i += 1) { state[i]       = self.rotate(y[i], 11)^state[i + 16]; }
+                for (i = 0; i < 16; i += 2) {
+                    self.swap(state, i + 16, i + 17);
+                }
+            }
+
+            for (i = 0; i < 16; i += 1) {
+                y[i] = 0;
             }
         }
 
-        for (i = 0; i < 16; i += 1) {
-            y[i] = 0;
-        }
-    }
+        self.hash = function(data) {
+            // init state
+            var i,
+                s = '',
+                state = new Array(32);
 
-    function hash(data) {
-        // init state
-        var i,
-            s = '',
-            state = new Array(32);
-
-        for (i = 0; i < 32; i += 1) {
-            state[i] = init[i];
-        }
-
-        // update with data
-        data += String.fromCharCode(128);
-
-        while(data.length % 32) {
-            data += String.fromCharCode(0)
-        }
-
-        for (var i = 0; i < data.length; i += 32) {
-            var block = data.substr(i, 32);
-            for (var j = 0; j < 32; j++) {
-                state[j] ^= block.charCodeAt(j);
+            for (i = 0; i < 32; i += 1) {
+                state[i] = init[i];
             }
-            transform(state);
-        }
 
-        // finalize
-        state[31] ^= 1;
+            // update with data
+            data += String.fromCharCode(128);
 
-        for (i = 0; i < 10; i += 1) {
-            transform(state);
-        }
+            while(data.length % 32) {
+                data += String.fromCharCode(0)
+            }
 
-        // convert to hex
-        for (i = 0; i < 8; i += 1) {
-            s += intToHex(state[i]);
+            for (var i = 0; i < data.length; i += b) {
+                var block = data.substr(i, b);
+                // XOR into state
+                for (var j = 0; j < b; j++) {
+                    state[j] ^= block.charCodeAt(j);
+
+                }
+
+                // Perform r identical rounds
+                for (var j = 0; j < r; j++){
+                    self.transform(state);
+                }
+            }
+
+            // finalize
+            state[31] ^= 1;
+            for (i = 0; i < f; i += 1) {
+                self.transform(state);
+            }
+
+            // convert to hex
+            for (i = 0; i < 8; i += 1) {
+                s += self.intToHex(state[i]);
+            }
+            return s;
         }
-        return s;
     }
 
-    return hash;
+    return Cubehash;
 }));
