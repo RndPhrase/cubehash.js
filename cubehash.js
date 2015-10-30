@@ -38,6 +38,7 @@
             19608647852, 9541915967, 5144979599, -4355863926
         ];
 
+        // Left shit a, b bits. If the number gets too large
         self.rotate = function(a, b) {
             return (a << b) | (a >>> (32 - b));
         }
@@ -45,10 +46,12 @@
         self.intToHex = function(v) {
             var s = '';
 
-            for (; v !== 0; v >>>= 8) {
-                s += ((v >> 4) & 0xF).toString(16) + (v & 0xF).toString(16);
+            // Working from right to left
+            for(; v !== 0; v >>>= 8){
+                s = ((v >> 4) & 0xF).toString(16) + (v & 0xf).toString(16) + s;
             }
 
+            // Prepend zeroes with... zeroes
             while(s.length < 8) s = "0" + s;
 
             return s;
