@@ -67,15 +67,15 @@ describe('cubehash', function () {
         cubehash = new Cubehash();
         assert.equal(
             cubehash.hash(''),
-            '38d1e8a22d7baac6fd5262d83de89cacf784a02caa866335299987722aeabc59'
+            'a2e8d138c6aa7b2dd86252fdac9ce83d2ca084f7356386aa7287992959bcea2a'
         );
         assert.equal(
             cubehash.hash('Hello'),
-            '011f92d0c9418d9cbf59cb1c709b8fb40efcf7c48e735a1436c0a6e72d337e6c'
+            'd0921f019c8d41c91ccb59bfb48f9b70c4f7fc0e145a738ee7a6c0366c7e332d'
         );
         assert.equal(
             cubehash.hash('The quick brown fox jumps over the lazy dog'),
-            '9096bfd8082d5a31facac9b4de6615bdd5596389832ca3058abc97377b58aa94'
+            'd8bf9690315a2d08b4c9cafabd1566de896359d505a32c833797bc8a94aa587b'
         );
         done();
     });
