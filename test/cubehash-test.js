@@ -12,9 +12,9 @@ describe('cubehash', function () {
     });
 
     it('Should rotate with 32 bit modulus', function() {
-        cubehash = new Cubehash();
+        var i;
 
-        for(var i = 1; i < 30; i++) {
+        for(i = 1; i < 30; i += 1) {
             assert.equal(
                 cubehash.rotate(2, i),
                 Math.pow(2, i + 1)
@@ -28,7 +28,7 @@ describe('cubehash', function () {
             cubehash.rotate(2, 32),
             2
         );
-        for(var i = 33; i < 62; i++) {
+        for(i = 33; i < 62; i += 1) {
             assert.equal(
                 cubehash.rotate(2, i),
                 Math.pow(2, i % 31)
@@ -51,7 +51,7 @@ describe('cubehash', function () {
         {arg: -401703733, expect: 'e80e7ccb'},
         {arg: 4294967295, expect: 'ffffffff'},
         {arg: -42, expect: 'ffffffd6'}
-    ]
+    ];
 
     intToHexTests.forEach(function(test) {
         it('Should call intToHex with ' +
@@ -60,8 +60,8 @@ describe('cubehash', function () {
                 cubehash.intToHex(test.arg),
                 test.expect
             );
-        })
-    })
+        });
+    });
 
     it('Should hash correctly', function (done) {
         cubehash = new Cubehash();

@@ -22,10 +22,10 @@
         var self = this;
         // Currently initialization is hardcoded to 10
         // if (i == undefined) i = 16;
-        if (r == undefined) r = 1;
-        if (b == undefined) b = 32;
-        if (f == undefined) f = 10;
-        if (h == undefined) h = 8;
+        if (r === undefined) { r = 1; }
+        if (b === undefined) { b = 32; }
+        if (f === undefined) { f = 10; }
+        if (h === undefined) { h = 8; }
 
         var init = [
             -2096419883, 658334063, -679114902, 1246757400,
@@ -41,7 +41,7 @@
         // Left shit a, b bits. If the number gets too large
         self.rotate = function(a, b) {
             return (a << b) | (a >>> (32 - b));
-        }
+        };
 
         self.intToHex = function(v) {
             var s = '';
@@ -52,17 +52,17 @@
             }
 
             // Prepend zeroes with... zeroes
-            while(s.length < 8) s = "0" + s;
+            while(s.length < 8) { s = '0' + s; }
 
             return s;
-        }
+        };
 
         self.swap = function(arr, i, j) {
             var tmp = arr[i];
             arr[i] = arr[j];
             arr[j] = tmp;
             return arr;
-        }
+        };
 
         self.transform = function(state) {
             var i, r,
@@ -83,11 +83,12 @@
             for (i = 0; i < 16; i += 1) {
                 y[i] = 0;
             }
-        }
+        };
 
         self.hash = function(data) {
             // init state
             var i,
+                j,
                 s = '',
                 state = new Array(32);
 
@@ -99,19 +100,18 @@
             data += String.fromCharCode(128);
 
             while(data.length % 32) {
-                data += String.fromCharCode(0)
+                data += String.fromCharCode(0);
             }
 
-            for (var i = 0; i < data.length; i += b) {
+            for (i = 0; i < data.length; i += b) {
                 var block = data.substr(i, b);
                 // XOR into state
-                for (var j = 0; j < b; j++) {
+                for (j = 0; j < b; j += 1) {
                     state[j] ^= block.charCodeAt(j);
-
                 }
 
                 // Perform r identical rounds
-                for (var j = 0; j < r; j++){
+                for (j = 0; j < r; j += 1){
                     self.transform(state);
                 }
             }
@@ -127,8 +127,8 @@
                 s += self.intToHex(state[i]);
             }
             return s;
-        }
-    }
+        };
+    };
 
     return Cubehash;
 }));
